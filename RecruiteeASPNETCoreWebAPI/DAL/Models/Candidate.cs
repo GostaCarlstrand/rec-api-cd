@@ -2,25 +2,12 @@
 
 public record Candidate
 {
-    public Candidate(string name,
-        List<string> emails,
-        List<string> phones,
-        List<string> socialLinks,
-        List<string> links,
-        string coverLetter)
-    {
-        Name = name;
-        Emails = emails;
-        Phones = phones;
-        Social_links = socialLinks;
-        Links = links;
-        Cover_letter = coverLetter;
-    }
+    public Candidate() { }
 
-    public string Name { get; set; }
-    public List<string> Emails { get; set; }
-    public List<string> Phones { get; set; }
-    public List<string> Social_links { get; set; }
-    public List<string> Links { get; set; }
-    public string Cover_letter { get; set; }
+    public string name { get; set; }
+    public List<string> emails { get; set; }
+    public List<string> phones { get; set; }
+    public List<string>? social_links { get; set; }
+    public List<string>? links { get; set; }
+    public string? cover_letter { get; set; }
 }
