@@ -1,0 +1,11 @@
+{
+  "candidate": {
+    "name": "API Test Candidate",
+    "emails": [ "john@example.com" ],
+    "phones": [ "123123123" ],
+    "social_links": [ "https://www.facebook.com/johnexamplecom/" ],
+    "links": [ "https://www.example.com/" ],
+    "cover_letter": "Example cover letter"
+  },
+  "offer_id": "645211"
+}
