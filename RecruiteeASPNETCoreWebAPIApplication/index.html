@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recruitee ASP.NET Core Web API Application</title>
+    <style type="text/css">
+        p {
+            margin: 2px;
+        }
+
+        input {
+            display: block;
+            margin: 0 0 12px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Apply for position as fullstack developer</h1>
+        <p>Full name</p>
+        <input type="text" class="name-js" value="API Application Test User">
+        <p>Email</p>
+        <input type="text" class="email-js" value="test@test.test">
+        <p>Phone</p>
+        <input type="text" class="phone-js" value="123456789">
+        <p>Social link</p>
+        <input type="text" class="social-js" value="https://test.com/profile/">
+        <p>Link</p>
+        <input type="text" class="link-js" value="https://test.io/">
+        <p>Cover letter</p>
+        <input type="text" class="letter-js" value="Test letter">
+        <input class="post-user-js" type="button" value="Apply">
+    </div>
+
+    <script>
+        document.querySelector(".post-user-js").addEventListener("click", () => {
+            const name = document.querySelector(".name-js").value;
+            const email = document.querySelector(".email-js").value;
+            const phone = document.querySelector(".phone-js").value;
+            const social = document.querySelector(".social-js").value;
+            const link = document.querySelector(".link-js").value;
+            const letter = document.querySelector(".letter-js").value;
+
+            const application = {
+                candidate: {
+                    name: name,
+                    emails: [email],
+                    phones: [phone],
+                    social_links: [social],
+                    links: [link],
+                    cover_letter: letter
+                },
+                offer_id: "645211"
+            }
+
+            fetch("https://localhost:7059/candidates/post-candidate",
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': "application/json"
+                    },
+                    body: JSON.stringify(application)
+                });
+        });
+    </script>
+</body>
+
+</html>
