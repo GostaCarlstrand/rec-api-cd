@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -12,6 +13,13 @@ namespace RecruiteeASPNETCoreWebAPI.Controllers;
 
 public class CandidateController : Controller
 {
+    private readonly IConfiguration Configuration;
+
+    public CandidateController(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
     [HttpPost("/candidates/test-post-candidate")]
     public async Task<IResult> PostTestCandidateAsync()
     {
@@ -28,11 +36,11 @@ public class CandidateController : Controller
     public async Task<IResult> PostCandidateAsync([FromBody] Application application)
     {
         var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "Y2djTlNRK1pQbDMrTzVpamVhdWl6dz09");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
         var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates/xx", data);
+        var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates", data);
 
-        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+        if (response.StatusCode != System.Net.HttpStatusCode.Created)
             return Results.BadRequest();
         else
             return Results.Ok();
