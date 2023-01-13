@@ -3,10 +3,16 @@ namespace ASPNETCoreWebAPI
 {
     public class FileUploadAPI
     {
-        public int ImgID { get; set; }
-        public string? Customers { get; set; }
+        
+        public string? name { get; set; }
+        public string? emails { get; set; }
+        public string? phones { get; set; }
+        public string? social_links { get; set; }
+        public string? links { get; set; }
+        public string? cover_letter { get; set; }
+        public string? company_id { get; set; }
         public IFormFile? files { get; set; }
-        public string? ImgName { get; set; }
+        
     }
     public class common
     {
