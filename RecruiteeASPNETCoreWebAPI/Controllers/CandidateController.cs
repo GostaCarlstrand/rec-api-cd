@@ -25,15 +25,16 @@ public class CandidateController : Controller
     }
 
     [HttpPost("/candidates/post-candidate")]
-
     public async Task<IResult> PostCandidateAsync([FromBody] Application application)
     {
         var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "Y2djTlNRK1pQbDMrTzVpamVhdWl6dz09");
         var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates", data);
-        var responseString = await response.Content.ReadAsStringAsync();
+        var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates/xx", data);
 
-        return Results.Ok(responseString);
+        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            return Results.BadRequest();
+        else
+            return Results.Ok();
     }
 }
