@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -39,6 +38,8 @@ public class CandidateController : Controller
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
         var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");
         var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates", data);
+        var responseString = await response.Content.ReadAsStringAsync();
+        var responseStringJson = JsonSerializer.Serialize(responseString);
 
         if (response.StatusCode != System.Net.HttpStatusCode.Created)
             return Results.BadRequest();

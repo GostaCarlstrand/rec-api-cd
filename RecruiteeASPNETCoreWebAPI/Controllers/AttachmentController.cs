@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Xml.Linq;
 
 namespace RecruiteeASPNETCoreWebAPI.Controllers;
 
@@ -14,37 +9,36 @@ namespace RecruiteeASPNETCoreWebAPI.Controllers;
 [ApiController]
 [EnableCors]
 
-public class AttachmentController : ControllerBase
+public class AttachmentController : Controller
 {
-    public static IWebHostEnvironment? _environment;
-    public AttachmentController(IWebHostEnvironment environment)
+    private readonly IConfiguration Configuration;
+
+    public AttachmentController(IConfiguration configuration)
     {
-        _environment = environment;
+        Configuration = configuration;
     }
-    [HttpPost("/attachment/attach-file")]
-    public async Task<IResult> Post([FromForm] FileUploadAPI candData)
-    {                             
-        try
-        {                                                              
-            if (candData.files.Length > 0)
-            {
-                if (!Directory.Exists(_environment.WebRootPath + "/Upload/"))
-                {
-                    Directory.CreateDirectory(_environment.WebRootPath + "/Upload/");
-                }
-                using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "/Upload/" + candData.files.FileName))
-                {
-                    await candData.files.CopyToAsync(filestream);
-                    filestream.Flush();                        
-                }
-            }
-        }
-        catch (Exception ex)
+
+    [HttpPost("/attachments/post-attachment")]
+    public async Task<IResult> PostAttachmentAsync([FromForm] Attachment attachment)
+    {
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
+        var data = new MultipartFormDataContent();
+        var file = attachment.file;
+
+        if (file != null)
         {
-            throw;
+            var fileStreamData = new StreamContent(file.OpenReadStream());
+            data.Add(fileStreamData, "attachment[file]", file.FileName);
         }
-        return Results.Ok();
+
+        data.Add(new StringContent(attachment.candidate_id), "attachment[candidate_id]");
+        var response = await client.PostAsync("https://api.recruitee.com/c/60851/attachments", data);
+
+        if (response.StatusCode != System.Net.HttpStatusCode.Created)
+            return Results.BadRequest();
+        else
+            return Results.Ok();
     }
-   
-      
 }
