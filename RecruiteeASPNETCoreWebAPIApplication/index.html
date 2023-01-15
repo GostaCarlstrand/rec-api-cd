@@ -34,10 +34,19 @@
         <p>Cover letter</p>
         <input type="text" class="letter-js" value="Test letter">
         <input class="post-user-js" type="button" value="Apply">
+
+        <h1>Attach a file (image or pdf) on registered candidate</h1>
+        <p>Candidate ID</p>
+        <input type="text" class="id-js" value="46507362">
+        <input class="file-js" type="file" />
+        <input class="post-file-js" type="button" value="Attach">
     </div>
 
     <script>
-        document.querySelector(".post-user-js").addEventListener("click", () => {
+        document.querySelector(".post-user-js").addEventListener("click", postCandidate)
+        document.querySelector(".post-file-js").addEventListener("click", postAttachment)
+
+        async function postCandidate() {
             const name = document.querySelector(".name-js").value;
             const email = document.querySelector(".email-js").value;
             const phone = document.querySelector(".phone-js").value;
@@ -57,15 +66,31 @@
                 offer_id: "645211"
             }
 
-            fetch("https://localhost:7059/candidates/post-candidate",
+            await fetch("https://localhost:7059/candidates/post-candidate",
                 {
                     method: "POST",
                     headers: {
                         'Content-Type': "application/json"
                     },
                     body: JSON.stringify(application)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
                 });
-        });
+        }
+
+        async function postAttachment() {
+            const id = document.querySelector(".id-js").value;
+            const file = document.querySelector(".file-js").files[0];
+            let formData = new FormData();
+            formData.append("file", file);
+            fetch(`https://localhost:7059/attachments/post-attachment/${id}`,
+                {
+                    method: "POST",
+                    body: formData
+                });
+        }
     </script>
 </body>
 
