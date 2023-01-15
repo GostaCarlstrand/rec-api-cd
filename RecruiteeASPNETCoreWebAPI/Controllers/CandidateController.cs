@@ -39,11 +39,10 @@ public class CandidateController : Controller
         var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");
         var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates", data);
         var responseString = await response.Content.ReadAsStringAsync();
-        var responseStringJson = JsonSerializer.Serialize(responseString);
 
         if (response.StatusCode != System.Net.HttpStatusCode.Created)
             return Results.BadRequest();
         else
-            return Results.Ok();
+            return Results.Ok(responseString);
     }
 }
