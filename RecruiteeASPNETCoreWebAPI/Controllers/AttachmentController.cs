@@ -18,14 +18,14 @@ public class AttachmentController : Controller
         Configuration = configuration;
     }
 
-    [HttpPost("/attachments/post-attachment")]
-    public async Task<IResult> PostAttachmentAsync([FromForm] Attachment attachment)
+    [HttpPost("/attachments/post-attachment/{candidateId}")]
+    public async Task<IResult> PostAttachmentAsync([FromForm] Attachment attachment, string candidateId)
     {
         var client = new HttpClient();
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
         var data = new MultipartFormDataContent();
-        var file = attachment.file;
+        var file = attachment.File;
 
         if (file != null)
         {
@@ -33,7 +33,7 @@ public class AttachmentController : Controller
             data.Add(fileStreamData, "attachment[file]", file.FileName);
         }
 
-        data.Add(new StringContent(attachment.candidate_id), "attachment[candidate_id]");
+        data.Add(new StringContent(candidateId), "attachment[candidate_id]");
         var response = await client.PostAsync("https://api.recruitee.com/c/60851/attachments", data);
 
         if (response.StatusCode != System.Net.HttpStatusCode.Created)
