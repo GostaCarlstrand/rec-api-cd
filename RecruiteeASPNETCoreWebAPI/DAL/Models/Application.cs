@@ -1,12 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models;
 
-namespace RecruiteeASPNETCoreWebAPI.DAL.Models
+public class Application
 {
-    public class Application
-    {
-        public Application() { }
+    public Application() { }
 
-        public Candidate candidate { get; set; }
-        public string offer_id { get; set; }
-    }
+    public Applicant candidate { get; set; }
+    public string offer_id { get; set; }
 }

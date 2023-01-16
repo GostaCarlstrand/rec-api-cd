@@ -1,8 +1,7 @@
-﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models
+﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models;
+
+public class Attachment
 {
-    public class Attachment
-    {
-        public Attachment() { }
-        public IFormFile File { get; set; }
-    }
+    public Attachment() { }
+    public IFormFile File { get; set; }
 }

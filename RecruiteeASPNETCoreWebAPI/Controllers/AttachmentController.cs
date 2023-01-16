@@ -25,8 +25,8 @@ public class AttachmentController : Controller
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
         var data = new MultipartFormDataContent();
-        var file = attachment.File;
 
+        var file = attachment.File;
         if (file != null)
         {
             var fileStreamData = new StreamContent(file.OpenReadStream());

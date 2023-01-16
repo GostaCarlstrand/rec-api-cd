@@ -1,8 +1,8 @@
 ﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models;
 
-public record Candidate
+public record Applicant
 {
-    public Candidate() { }
+    public Applicant() { }
 
     public string name { get; set; }
     public List<string> emails { get; set; }
