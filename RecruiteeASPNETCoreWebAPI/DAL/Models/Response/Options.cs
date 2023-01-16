@@ -1,6 +1,5 @@
-﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models.Response
+﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models.Response;
+
+public class Options
 {
-    public class Options
-    {
-    }
 }

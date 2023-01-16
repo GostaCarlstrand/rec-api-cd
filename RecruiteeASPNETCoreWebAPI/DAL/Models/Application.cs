@@ -1,10 +1,9 @@
-﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models
-{
-    public class Application
-    {
-        public Application() { }
+﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models;
 
-        public Applicant candidate { get; set; }
-        public string offer_id { get; set; }
-    }
+public class Application
+{
+    public Application() { }
+
+    public Applicant candidate { get; set; }
+    public string offer_id { get; set; }
 }
