@@ -1,0 +1,3 @@
+﻿namespace RecruiteeASPNETCoreWebAPI.DAL.Models
+{
+}
