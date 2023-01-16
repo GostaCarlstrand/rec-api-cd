@@ -33,18 +33,13 @@
         <input type="text" class="link-js" value="https://test.io/">
         <p>Cover letter</p>
         <input type="text" class="letter-js" value="Test letter">
-        <input class="post-user-js" type="button" value="Apply">
-
-        <h1>Attach a file (image or pdf) on registered candidate</h1>
-        <p>Candidate ID</p>
-        <input type="text" class="id-js" value="46507362">
+        <p>Reume</p>
         <input class="file-js" type="file" />
-        <input class="post-file-js" type="button" value="Attach">
+        <input class="post-user-js" type="button" value="Apply">
     </div>
 
     <script>
         document.querySelector(".post-user-js").addEventListener("click", postCandidate)
-        document.querySelector(".post-file-js").addEventListener("click", postAttachment)
 
         async function postCandidate() {
             const name = document.querySelector(".name-js").value;
@@ -76,12 +71,11 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    postAttachment(data)
                 });
         }
 
-        async function postAttachment() {
-            const id = document.querySelector(".id-js").value;
+        async function postAttachment(id) {
             const file = document.querySelector(".file-js").files[0];
             let formData = new FormData();
             formData.append("file", file);
