@@ -2,82 +2,71 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
+using RecruiteeASPNETCoreWebAPI.Controllers;
+using RecruiteeASPNETCoreWebAPI.PyPrinter;
 
 namespace RecruiteeASPNETCoreWebAPI.FormValidation
 {
 	public static class Validator
 	{
-		private static readonly int _maxCharEmail = 5;
+		private static readonly int _maxCharEmail = 30;
 		private static readonly int _maxCharName = 30;
+		private static readonly int _maxCharCoverLetter = 400;
 		private static readonly int _maxCharPhone = 15;
 		private static readonly int _maxCharLink = 30;
 		private static readonly int _maxCharSocialLink = 30;
 
-		public static bool isCandidateDataValid(Applicant applicant)
-		{
-			if (!isListValid(applicant.emails, _maxCharEmail))
-			{
-				return false;
-			}
-            if (!isListValid(applicant.links, _maxCharLink))
-            {
+		
+		private static readonly int _minCharName = 1;		        
+		private static readonly int _defaultMinCharValue = 5;		        
+		private static readonly int _defaultMaxCharValue = 30;
+        
+        
+
+        public static bool isCandidateDataValid(Applicant applicant)
+		{            
+            if (!isInputValid(new List<string>() { applicant.name }, _maxCharName, _minCharName))            
+                return false;                           
+            if (!isInputValid(new List<string>() { applicant.cover_letter }, _maxCharCoverLetter))            
+                return false;                
+            if (!isInputValid(applicant.emails, _maxCharEmail, email: true))
                 return false;
-            }
+            if (!isInputValid(applicant.links, _maxCharLink))
+                return false;
+            if (!isInputValid(applicant.phones, _maxCharPhone))
+                return false;
+            if (!isInputValid(applicant.social_links, _maxCharSocialLink))
+                return false;
 
-            return true;
+            return false;
 		}
 
-        public static bool isPhoneValid(List<string> phones)
-        { 
-            
-			foreach(var phone in phones)
-			{
-				if(!isNotEmpty(phone))
-				{                    
-					return false;
-				}
-				if(notEnoughChars(phone, _maxCharPhone))
-				{                    
-                    return false;
-				}                                
-            }
-
-			return true;
-		}
-        public static bool isListValid(List<string> items, int maxItemChars) {
-            
+        public static bool isInputValid(List<string> items, int maxItemChars = 30, int minItemChars = 5, bool email = false) {            
 			foreach(var item in items)
 			{
-				if(!isNotEmpty(item))
-				{
-                    //empty field
+				if(!isNotEmpty(item))            
 					return false;
-				}
-				if(notEnoughChars(item, maxItemChars))
-				{
-                    //g@.
+				if(!isValidSize(item, maxItemChars, minItemChars))    
                     return false;
-				}
-                if (!IsValidEmail(item))
-                {
-                    //g--!@@.s
-                    return false;
-                }                
+                if (email)
+                    if (!IsContentValid(item))
+                        return false;
+                
             }
-
 			return true;
 		}
 
 		public static bool isNotEmpty(string item)
 		{			
-			return item.Length > 0;
+			return String.IsNullOrEmpty(item);
 		}
-		public static bool notEnoughChars(string item, int minValue)
+
+		public static bool isValidSize(string item, int maxVal, int minVal)
 		{
-            //Validates the minimum amount of characters on the item                       
-            return item.Length < minValue;
+            //Checks that items length is within a valid interval
+            return item.Length < maxVal && item.Length >= minVal;
 		}
-        public static bool IsValidEmail(string email)
+        public static bool IsContentValid(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return false;
@@ -121,22 +110,4 @@ namespace RecruiteeASPNETCoreWebAPI.FormValidation
             }
         }
 	}
-
-
-    
-
-    /*
-        public string name { get; set; }
-public List<string> emails { get; set; }
-public List<string> phones { get; set; }
-public List<string>? social_links { get; set; }
-public List<string>? links { get; set; }
-public string? cover_letter { get; set; }
-{
-
-    */
-
-
-
 }
-
