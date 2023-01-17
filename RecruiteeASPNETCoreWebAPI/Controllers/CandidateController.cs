@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using RecruiteeASPNETCoreWebAPI.DAL.Models.Response;
+using RecruiteeASPNETCoreWebAPI.PyPrinter;
 using RecruiteeASPNETCoreWebAPI.FormValidation;
 using System.Net.Http.Headers;
 using System.Text.Json;
+
 
 namespace RecruiteeASPNETCoreWebAPI.Controllers;
 
@@ -20,15 +22,13 @@ public class CandidateController : Controller
     {
         Configuration = configuration;
     }
-
+    
     [HttpPost("/candidates/post-candidate")]
     public async Task<IResult> PostCandidateAsync([FromBody] Application application)
     {
 
-        if(!Validator.isCandidateDataValid(application.candidate))
-        {
-            return Results.BadRequest();
-        }
+        if(!Validator.isCandidateDataValid(application.candidate))        
+            return Results.BadRequest();        
         var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
         var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");

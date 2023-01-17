@@ -17,15 +17,12 @@ namespace RecruiteeASPNETCoreWebAPI.FormValidation
 		private static readonly int _maxCharSocialLink = 30;
 
 		
-		private static readonly int _minCharName = 1;		        
-		private static readonly int _defaultMinCharValue = 5;		        
-		private static readonly int _defaultMaxCharValue = 30;
-        
+		private static readonly int _minCharName = 1;		        		        
         
 
         public static bool isCandidateDataValid(Applicant applicant)
 		{            
-            if (!isInputValid(new List<string>() { applicant.name }, _maxCharName, _minCharName))            
+            if (!isInputValid(new List<string>() { applicant.name }, _maxCharName, _minCharName, isRequiredField: true))            
                 return false;                           
             if (!isInputValid(new List<string>() { applicant.cover_letter }, _maxCharCoverLetter))            
                 return false;                
@@ -38,32 +35,28 @@ namespace RecruiteeASPNETCoreWebAPI.FormValidation
             if (!isInputValid(applicant.social_links, _maxCharSocialLink))
                 return false;
 
-            return false;
+            return true;
 		}
 
-        public static bool isInputValid(List<string> items, int maxItemChars = 30, int minItemChars = 5, bool email = false) {            
-			foreach(var item in items)
-			{
-				if(!isNotEmpty(item))            
-					return false;
-				if(!isValidSize(item, maxItemChars, minItemChars))    
-                    return false;
+        public static bool isInputValid(List<string> items, int maxDefaultItemChars = 30, int minDefaultItemChars = 5, bool email = false, bool isRequiredField = false) {
+            foreach (var item in items)
+            {
+                if (String.IsNullOrEmpty(item) && !isRequiredField)
+                    return true;
+                if (!isValidSize(item, maxDefaultItemChars, minDefaultItemChars))
+                    return false;            
                 if (email)
                     if (!IsContentValid(item))
                         return false;
-                
             }
 			return true;
 		}
 
-		public static bool isNotEmpty(string item)
-		{			
-			return String.IsNullOrEmpty(item);
-		}
+
 
 		public static bool isValidSize(string item, int maxVal, int minVal)
 		{
-            //Checks that items length is within a valid interval
+            //Checks that item size is within the required interval
             return item.Length < maxVal && item.Length >= minVal;
 		}
         public static bool IsContentValid(string email)

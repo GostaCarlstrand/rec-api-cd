@@ -5,9 +5,9 @@ using System.Text.Json;
 using System.Net.Http;
 using System.Text;
 
-namespace RecruiteeASPNETCoreWebAPI.Controllers
+namespace RecruiteeASPNETCoreWebAPI.PyPrinter
 {
-    public class PyPrinter
+    public static class PyPrinter
     {
         public async static void PrintToPy(string printData)
         {
