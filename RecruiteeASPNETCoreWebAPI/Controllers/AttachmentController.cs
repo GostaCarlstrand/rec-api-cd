@@ -24,7 +24,10 @@ public class AttachmentController : Controller
         var client = new HttpClient();
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
+        var companyId = Configuration.GetValue<string>("RecAPICompanyId");        
         var data = new MultipartFormDataContent();
+
+        var url = $"https://api.recruitee.com/c/{companyId}/attachments";
 
         var file = attachment.File;
         if (file != null)
@@ -34,7 +37,7 @@ public class AttachmentController : Controller
         }
 
         data.Add(new StringContent(candidateId), "attachment[candidate_id]");
-        var response = await client.PostAsync("https://api.recruitee.com/c/60851/attachments", data);
+        var response = await client.PostAsync($"https://api.recruitee.com/c/{companyId}/attachments", data);
 
         if (response.StatusCode != System.Net.HttpStatusCode.Created)
             return Results.BadRequest();
