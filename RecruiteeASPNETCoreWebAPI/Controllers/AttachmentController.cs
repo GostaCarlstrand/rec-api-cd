@@ -26,8 +26,7 @@ public class AttachmentController : Controller
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
         var companyId = Configuration.GetValue<string>("RecAPICompanyId");        
         var data = new MultipartFormDataContent();
-
-        var url = $"https://api.recruitee.com/c/{companyId}/attachments";
+        
 
         var file = attachment.File;
         if (file != null)

@@ -31,8 +31,9 @@ public class CandidateController : Controller
             return Results.BadRequest();        
         var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
+        var companyId = Configuration.GetValue<string>("RecAPICompanyId");
         var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("https://api.recruitee.com/c/60851/candidates", data);
+        var response = await client.PostAsync($"https://api.recruitee.com/c/{companyId}/candidates", data);
 
        
              
