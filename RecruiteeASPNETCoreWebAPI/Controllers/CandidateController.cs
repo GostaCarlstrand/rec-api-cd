@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using RecruiteeASPNETCoreWebAPI.DAL.Models.Response;
-using RecruiteeASPNETCoreWebAPI.PyPrinter;
 using RecruiteeASPNETCoreWebAPI.FormValidation;
 using System.Net.Http.Headers;
 using System.Text.Json;

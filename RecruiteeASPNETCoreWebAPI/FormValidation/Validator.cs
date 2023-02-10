@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using RecruiteeASPNETCoreWebAPI.Controllers;
-using RecruiteeASPNETCoreWebAPI.PyPrinter;
 
 namespace RecruiteeASPNETCoreWebAPI.FormValidation
 {
