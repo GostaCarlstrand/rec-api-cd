@@ -42,4 +42,4 @@ jobs:
           environment_name: Foretestsite-env
           version_label: fore-test-site-source
           region: eu-north-1
-          deployment_package: RecruiteeASPNETCoreWebAPI.zip
+          deployment_package: site.zip
