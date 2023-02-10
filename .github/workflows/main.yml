@@ -31,15 +31,15 @@ jobs:
         run: cd RecruiteeASPNETCoreWebAPI; dotnet restore; dotnet publish -r linux-x64 --configuration "Release" --self-contained "true" -o ../site;
 
       - name: Generate deployment package 
-        run: cd site; zip ../site.zip *; cd ..; zip RecruiteeASPNETCoreWebAPI.zip aws-windows-deployment-manifest.json
+        run: cd site; zip ../site.zip *;
 
       - name: Deploy to EB
-        uses: GostaCarlstrand/beanstalk-deploy@v16
+        uses: einaregilsson/beanstalk-deploy@v19
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: foreWebAPI
-          environment_name: foreWebAPIEnv
-          version_label: ${{ github.run_id }}
-          region: europe
+          application_name: Fore-Test-Site
+          environment_name: Foretestsite-env
+          version_label: fore-test-site-source
+          region: eu-north-1
           deployment_package: RecruiteeASPNETCoreWebAPI.zip
