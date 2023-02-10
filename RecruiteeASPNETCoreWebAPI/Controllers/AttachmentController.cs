@@ -2,12 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using RecruiteeASPNETCoreWebAPI.DAL.Models;
 using System.Net.Http.Headers;
+using RecruiteeASPNETCoreWebAPI.SL;
+using RecruiteeASPNETCoreWebAPI.SL.Enums;
+using static System.Net.Mime.MediaTypeNames;
+
 
 namespace RecruiteeASPNETCoreWebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors]
+
 
 public class AttachmentController : Controller
 {
@@ -19,28 +24,13 @@ public class AttachmentController : Controller
     }
 
     [HttpPost("/attachments/post-attachment/{candidateId}")]
-    public async Task<IResult> PostAttachmentAsync([FromForm] Attachment attachment, string candidateId)
+    public IResult PostAttachment([FromServices] IAttachmentService service, [FromForm] Attachment attachment, string candidateId)
     {
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Accept.Clear();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
-        var companyId = Configuration.GetValue<string>("RecAPICompanyId");        
-        var data = new MultipartFormDataContent();
-        
+        var result = service.PostAttachment(attachment, candidateId);
 
-        var file = attachment.File;
-        if (file != null)
-        {
-            var fileStreamData = new StreamContent(file.OpenReadStream());
-            data.Add(fileStreamData, "attachment[file]", file.FileName);
-        }
-
-        data.Add(new StringContent(candidateId), "attachment[candidate_id]");
-        var response = await client.PostAsync($"https://api.recruitee.com/c/{companyId}/attachments", data);
-
-        if (response.StatusCode != System.Net.HttpStatusCode.Created)
+        if (result.Result == false)
             return Results.BadRequest();
-        else
-            return Results.Ok();
+
+        return Results.Ok();
     }
 }

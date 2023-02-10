@@ -5,6 +5,10 @@ using RecruiteeASPNETCoreWebAPI.DAL.Models.Response;
 using RecruiteeASPNETCoreWebAPI.FormValidation;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using RecruiteeASPNETCoreWebAPI.SL;
+using RecruiteeASPNETCoreWebAPI.SL.Enums;
+
+
 
 
 namespace RecruiteeASPNETCoreWebAPI.Controllers;
@@ -12,6 +16,7 @@ namespace RecruiteeASPNETCoreWebAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors]
+
 
 public class CandidateController : Controller
 {
@@ -21,30 +26,18 @@ public class CandidateController : Controller
     {
         Configuration = configuration;
     }
-    
+
     [HttpPost("/candidates/post-candidate")]
-    public async Task<IResult> PostCandidateAsync([FromBody] Application application)
+    public IResult PostCandidate([FromServices] ICandidateService service, [FromBody] Application application)
     {
-
-        if(!Validator.isCandidateDataValid(application.candidate))        
-            return Results.BadRequest();        
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Bearer"));
-        var companyId = Configuration.GetValue<string>("RecAPICompanyId");
-        var data = new StringContent(JsonSerializer.Serialize(application), System.Text.Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"https://api.recruitee.com/c/{companyId}/candidates", data);
-
-       
-             
-        var responseString = await response.Content.ReadAsStringAsync();
-
-        var responseObject = JsonSerializer.Deserialize<Response>(responseString);
-
-        var candidateId = responseObject.candidate.id;
-
-        if (response.StatusCode != System.Net.HttpStatusCode.Created)
+        if (!Validator.isCandidateDataValid(application.candidate))
             return Results.BadRequest();
-        else
-            return Results.Ok(candidateId);
+
+        var result = service.PostCandidate(application);
+
+        if (result.Result.ServiceResponse == ServiceResponse.BadRequest)
+            return Results.BadRequest();
+
+        return Results.Ok(result.Result.CandidateId);
     }
 }
