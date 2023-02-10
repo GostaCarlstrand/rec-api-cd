@@ -42,4 +42,5 @@ jobs:
           environment_name: Foretestsite-env
           version_label: fore-test-site-source
           region: eu-north-1
+          use_existing_version_if_available: true
           deployment_package: site.zip
