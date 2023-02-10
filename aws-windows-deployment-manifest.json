@@ -5,7 +5,7 @@
       {
         "name": "RecruiteeAPI",
         "parameters": {
-          "appBundle": "site.zip",
+          "appBundle": "RecruiteeASPNETCoreWebAPI.zip",
           "iisPath": "/",
           "iisWebSite": "Default Web Site"
         }
